@@ -1,0 +1,19 @@
+TableSurgeon
+============
+
+We as rails folks tend to do a lot of horizontal slicing.  REST principles dictate that we manage our resources individually.  We create, update and destroy a single record at a time.  While this might work well for API's and other program to program interfaces, it often stiffs the people who are managing the data in our applications.  How many clicks does it take to upload a new photo to 20 different records?  Edit, click to find file on system, navigate through directories on filesystem to locate file, click save, redirect back to index, click edit for the next one, click to find file on system, etc, etc.  By the time they're done they've probably made 125 clicks, made 80 HTTP requests, and rendered 40 web pages.  Not to mention that it probably took them almost an hour.  What a waste!
+
+TableSurgeon allows us to circumvent this admin UI disaster.  Take a moment to watch the following screencast before we dive into the details.
+
+[screencast]
+
+
+
+
+Example
+=======
+
+Example goes here.
+
+
+Copyright (c) 2010 John Trupiano, released under the MIT license
