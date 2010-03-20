@@ -9,16 +9,6 @@ module TableSurgeon
     def table_surgeon(records, path)
       return no_records if records.nil? || records.empty?
 
-      @_table_surgeon_display_columns = {
-        :name => :text, 
-        :image_relative_path => :image
-      }.stringify_keys
-      
-      @_table_surgeon_editable_columns = {
-        :image => :file_field,
-        :video_url => :text_field
-      }.stringify_keys
-
       # swiped from actionpack 2.3.5 form_tag_helper.rb (including the closing </form> tag below)
       html = form_tag_html(html_options_for_form(path, :multipart => true, :method => :put))
       html += 
