@@ -1,20 +1,25 @@
 module TableSurgeon
   module ViewHelpers
+    # What is keeping us from rendering multiple table_surgeon's on the same page
+    # input name fields using "table_surgeon[]"
     
     # What is still hard-coded?
-    # @_table_surgeon_display_columns
-    # @_table_surgeon_editable_columns
-    # table class name "stickup"
-    # input name fields using "speakers[]" in render_editable_col
-    def table_surgeon(records, path)
+    #   submit_tag with text "Mass Update Records"
+    #   placement of submit button
+    #   no class names for table rows -- should allow args to cycle() to be passed in
+    def table_surgeon(records, *args)
       return no_records if records.nil? || records.empty?
 
+      options = args.extract_options!
+      css_class = options.fetch(:class) { "surgery" }
+      
       # swiped from actionpack 2.3.5 form_tag_helper.rb (including the closing </form> tag below)
-      html = form_tag_html(html_options_for_form(path, :multipart => true, :method => :put))
+      html = form_tag_html(html_options_for_form(@_table_surgeon_return_path, :multipart => true, :method => :put))
       html += 
         content_tag(:table, 
           header_row + body_rows(records),
-          :class => "stickup")
+          :class => css_class) +
+        submit_tag("Mass Update Records")
       html += "</form>".html_safe!
       html
     end
@@ -56,8 +61,8 @@ module TableSurgeon
 
       def render_editable_col(obj, col, coltype)
         case coltype
-        when :file_field : send("#{coltype}_tag", "speakers[#{obj.id}][#{col}]")
-        when :text_field : send("#{coltype}_tag", "speakers[#{obj.id}][#{col}]", obj.send(col))
+        when :file_field : send("#{coltype}_tag", "table_surgeon[#{obj.id}][#{col}]")
+        when :text_field : send("#{coltype}_tag", "table_surgeon[#{obj.id}][#{col}]", obj.send(col))
         else
           "Can't find coltype #{coltype}"
         end

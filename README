@@ -8,12 +8,57 @@ TableSurgeon allows us to circumvent this admin UI disaster.  Take a moment to w
 [screencast]
 
 
-
-
 Example
 =======
 
-Example goes here.
+First, install the plugin,
 
+  ruby script/plugin install git://github.com/jtrupiano/table_surgeon.git
+  
+Add a table_surgeon declaration to app/controllers/videos_controller.rb:
+
+  table_surgeon :surgery, 
+    :display => {
+      :name => :text, 
+      :full_url_for_thumbnail_image => :image
+    }, 
+    :edit => {
+      :image => :file_field,
+      :video_url => :text_field
+    },
+    :path => lambda { surgery_videos_path },
+    :finder => lambda { @user.videos }
+
+Add the route:
+
+  map.resources :videos, :collection => {:surgery => [:get, :put]}
+  
+Render the surgery table in app/views/videos/surgery.html.erb:
+
+  <%= table_surgeon(@videos) %>
+
+Load the web page;
+
+  open http://app.local/videos/surgery
+
+
+Assumptions
+===========
+* Rails 2.3.5
+* ActiveRecord
+
+
+Not Implemented
+===============
+In order of priority
+
+  * Allow user to select display and editable columns dynamically
+  * Auto-determine default AR class so that a sane default can be provided for the :finder option
+  * Provide default of [:id, :name] to :display_columns (gracefully fail if :name doesn't exist, possibly fall back to #to_s)
+  * Re-render form on failed update so that user can quickly fix invalid value -- all data entered is currently lost if something fails validation
+  * Can we provide a sane default for the :path parameter?
+  * The Controller module is not thoroughly tested.
+  * Convert to a RubyGem
+  * Add rails generator(s)
 
 Copyright (c) 2010 John Trupiano, released under the MIT license
